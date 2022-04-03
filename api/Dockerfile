@@ -4,6 +4,7 @@ WORKDIR /app
 
 EXPOSE 5050
 
+RUN pip install pymongo
 RUN pip install flask
 RUN pip install flask_cors
 RUN pip install requests
