@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
 import Search from "./components/Search";
@@ -12,19 +13,40 @@ import Welcome from "./components/Welcome";
 function App() {
   const [word, setWord] = useState("");
   const [images, setImages] = useState([]);
-  const handleSearchSubmit = (e) => {
+
+  const getSavedImages = async () => {
+    try {
+      const res = await axios.get(`http://127.0.0.1:5050/images`);
+      setImages(res.data || []);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => getSavedImages(), [])
+
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    fetch(
-      // `http://192.168.1.162:5050/new-image?query=${word}`
-      `http://127.0.0.1:5050/new-image?query=${word}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setImages([{ ...data, title: word }, ...images]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // fetch(
+    //   // `http://192.168.1.162:5050/new-image?query=${word}`
+    //   `http://127.0.0.1:5050/new-image?query=${word}`
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setImages([{ ...data, title: word }, ...images]);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    try {
+      const res = await axios.get(`http://127.0.0.1:5050/new-image?query=${word}`);
+      setImages([{ ...res.data, title: word }, ...images]);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+
     setWord("");
   };
 
