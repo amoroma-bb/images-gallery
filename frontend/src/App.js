@@ -7,6 +7,10 @@ import ImageCard from "./components/ImageCard";
 import { Container, Row, Col } from "react-bootstrap";
 import Welcome from "./components/Welcome";
 import Spinner from "./components/Spinner";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 // const API_URL = "https://192.168.1.162:5050"
 
@@ -20,9 +24,11 @@ function App() {
       const res = await axios.get(`http://127.0.0.1:5050/images`);
       setImages(res.data || []);
       setLoading(false)
+      toast.success("Saved iamges download")
 
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     }
   }
 
@@ -44,9 +50,11 @@ function App() {
     try {
       const res = await axios.get(`http://127.0.0.1:5050/new-image?query=${word}`);
       setImages([{ ...res.data, title: word }, ...images]);
+      toast.info(`Newe image ${word} was found`)
       console.log(res.data);
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     }
 
     setWord("");
@@ -56,10 +64,12 @@ function App() {
     try {
       const res = await axios.delete(`http://127.0.0.1:5050/images/${id}`)
       if (res.data?.deleted_id) {
+        toast.warn(`Image${images.find((i) => i.id === id).title} was deleted`)
         setImages(images.filter((image) => image.id !== id));
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -73,9 +83,11 @@ function App() {
         setImages(images.map((image) => image.id === id ? { ...image, saved: true } : image));
       }
       console.log(res.data);
+      toast.info(`Image ${imageToBeSaved.title} has been saved`)
 
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
     }
   }
 
@@ -101,6 +113,7 @@ function App() {
           </Container>
         </>
       )}
+      <ToastContainer/>
     </div>
   );
 }
