@@ -12,11 +12,11 @@ import Welcome from "./components/Welcome";
 function App() {
   const [word, setWord] = useState("");
   const [images, setImages] = useState([]);
-
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     fetch(
-      `http://192.168.1.162:5050/new-image?query=${word}`
+      // `http://192.168.1.162:5050/new-image?query=${word}`
+      `http://127.0.0.1:5050/new-image?query=${word}`
     )
       .then((res) => res.json())
       .then((data) => {

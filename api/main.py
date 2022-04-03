@@ -1,4 +1,3 @@
-from distutils.debug import DEBUG
 from flask import Flask, request
 import requests
 from flask_cors import CORS
